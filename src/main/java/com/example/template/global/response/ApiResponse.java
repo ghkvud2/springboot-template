@@ -1,6 +1,7 @@
 package com.example.template.global.response;
 
 import com.example.template.global.code.ErrorCode;
+import com.example.template.global.exception.BaseException;
 
 public class ApiResponse<T> {
 
@@ -16,13 +17,21 @@ public class ApiResponse<T> {
 
 	static class ApiError {
 
-		@SuppressWarnings("unused")
 		private String code;
 
-		@SuppressWarnings("unused")
 		private String message;
 
 		public <E extends Enum<E> & ErrorCode> ApiError(E e) {
+			this.code = e.getCode();
+			this.message = e.getMessage();
+		}
+		
+		public <E extends ErrorCode> ApiError(E e) {
+			this.code = e.getCode();
+			this.message = e.getMessage();
+		}
+
+		public ApiError(BaseException e) {
 			this.code = e.getCode();
 			this.message = e.getMessage();
 		}
@@ -44,8 +53,16 @@ public class ApiResponse<T> {
 	public static <T> ApiResponse<T> createSuccess() {
 		return new ApiResponse<>(true, null, null);
 	}
+	
+	public static <T, E extends ErrorCode> ApiResponse<T> createFail(E e) {
+		return new ApiResponse<>(false, null, new ApiError(e));
+	}
 
 	public static <T, E extends Enum<E> & ErrorCode> ApiResponse<T> createFail(E e) {
+		return new ApiResponse<>(false, null, new ApiError(e));
+	}
+
+	public static <T> ApiResponse<T> createFail(BaseException e) {
 		return new ApiResponse<>(false, null, new ApiError(e));
 	}
 
