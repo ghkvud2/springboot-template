@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.template.domain.team.mapper.TeamMapper">
+
+ 	<resultMap type="com.example.template.global.entity.Team" id="teamResultMap">
+		<result property="teamId" column="team_id"/>
+		<result property="teamName" column="team_name"/>
+		<association property="stadium" javaType="com.example.template.global.entity.Stadium">
+			<result property="stadiumId" column="stadium_id"/>
+			<result property="stadiumName" column="stadium_name"/>
+			<result property="address" column="address"/>
+			<collection property="schedules" ofType="com.example.template.global.entity.Schedule">
+				<result property="scheDate" column="sche_date"/>
+			</collection>
+		</association>
+	</resultMap>
+
+	<select id="findTeamById" resultMap="teamResultMap">
+		select a.team_id, a.team_name, b.stadium_id, b.stadium_name, b.address, c.sche_date
+		from team a, stadium b, schedule c
+		where 1 = 1
+		  and a.stadium_id = b.stadium_id
+		  and b.stadium_id = c.stadium_id
+		  and a.team_id = #{teamId}
+		order by c.sche_date
+	</select> 
+	
+<!-- 
+	<resultMap type="com.example.template.global.entity.Team" id="teamResultMap">
+		<result property="teamId" column="team_id"/>
+		<result property="teamName" column="team_name"/>	
+		<association property="stadium" javaType="com.example.template.global.entity.Stadium">
+			<result property="stadiumId" column="stadium_id"/>
+			<result property="stadiumName" column="stadium_name"/>
+			<result property="address" column="address"/>
+			<collection property="schedules" ofType="com.example.template.global.entity.Schedule"
+				column="stadium_id" select="findScheduleById"/>
+		</association>		
+	</resultMap>
+	
+	<select id="findTeamById" resultMap="teamResultMap">
+		select a.team_id, a.team_name, b.stadium_id, b.stadium_name, b.address, c.sche_date
+		from team a, stadium b, schedule c
+		where 1 = 1
+		  and a.stadium_id = b.stadium_id
+		  and b.stadium_id = c.stadium_id
+		  and a.team_id = #{teamId}
+		order by c.sche_date
+	</select>
+	
+	<select id="findScheduleById" resultType="com.example.template.global.entity.Stadium">
+		select sche_date from schedule where stadium_id = #{stadiumId}
+	</select>
+	 -->
+	
+</mapper>
+
+
+

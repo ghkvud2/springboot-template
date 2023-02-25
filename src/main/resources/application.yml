@@ -1,1 +1,16 @@
-
+spring:
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:oracle:thin:@localhost:1521:orcl
+    username: sqld
+    password: sqld
+      
+logging:
+  level:
+#    '[org.springframework]': debug
+    '[jdbc.sqlonly]': debug
+    '[jdbc.sqltiming]': off
+    '[jdbc.audit]': off
+    '[jdbc.resultset]': off
+    '[jdbc.resultsettable]': debug
+    '[jdbc.connection]': off
